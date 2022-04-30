@@ -34,12 +34,23 @@ def filtered_by_contained_letters(known_letters, word_set):
     result_set = set(result_list)
     return result_set
 
-def get_not_in_word_letters(word_set):
+def get_not_contained_letters(word_set):
     known_not_contained_letters = input("Enter the known letters not in the word: ")
-    return filtered_by_not_in_word_letters(known_not_contained_letters, word_set)
+    return filtered_by_not_contained_letters(known_not_contained_letters, word_set)
 
-def filtered_by_not_in_word_letters(known_not_in, word_set):
-    print("")
+def filtered_by_not_contained_letters(known_not_in, word_set):
+    result_list = []
+    for word in word_set:
+        present_letter_count = 0
+        for letter in known_not_in:
+            if letter in word:
+                present_letter_count += 1
+        if present_letter_count > 0:
+            continue
+        else:
+            result_list.append(word)
+    result_set = set(result_list)
+    return result_set
 
 def get_right_placed_letters(word_set):
     # wildcard = @
@@ -85,9 +96,11 @@ if __name__ == "__main__":
     
     initial_word_set = make_set()
     #print_set(word_set)
-    contained_letters_word_set = get_contained_letters(initial_word_set)
-    right_placed_letters_word_set = get_right_placed_letters(contained_letters_word_set)
-    print_set(right_placed_letters_word_set)
-    write_result(right_placed_letters_word_set)
+    word_set = get_contained_letters(initial_word_set)
+    word_set = get_right_placed_letters(word_set)
+    word_set = get_not_contained_letters(word_set)
+
+    print_set(word_set)
+    write_result(word_set)
     #right_placed_letters_word_set = get_right_placed_letters(word_set)
     
