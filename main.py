@@ -1,11 +1,17 @@
+from generate_dictionary.dictionary_generator import make_dictionary 
+
 def make_set():
     word_list = []
     line_break = '\n'
-    with open("lista-palavras.txt") as palavras:
-        for line in palavras.readlines():
-            word_list.append(line.replace(line_break, '').lower())
-    word_set = set(word_list)
-    return word_set
+    try:
+        with open("dictionary.txt") as palavras:
+            for line in palavras.readlines():
+                word_list.append(line.replace(line_break, '').lower())
+        word_set = set(word_list)
+        return word_set
+    except:
+        make_dictionary()
+        return make_set()
 
 def print_set(set):
     for word in set:
@@ -37,7 +43,8 @@ def filtered_by_not_in_word_letters(known_not_in, word_set):
 
 def get_right_placed_letters(word_set):
     # wildcard = @
-    print("Example: \nAUDIO \n@B@@A")
+    examplemsg = 'AUDIO'.center(20) + '\n' + 'a@@i@'.center(20)
+    print("Example: \n{}".format(examplemsg))
     known_part_of_word = input("Enter the right placed letters you already have: ")
     return filtered_by_right_placed_letters(known_part_of_word, word_set)
 
@@ -75,6 +82,7 @@ def write_result(resulted_word_set):
         result_file.writelines(word)
     
 if __name__ == "__main__":
+    
     initial_word_set = make_set()
     #print_set(word_set)
     contained_letters_word_set = get_contained_letters(initial_word_set)
