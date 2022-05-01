@@ -57,7 +57,7 @@ def get_right_placed_letters(word_set):
     examplemsg = 'AUDIO'.center(20) + '\n' + 'a@@i@'.center(20)
     print("Example: \n{}".format(examplemsg))
     known_part_of_word = input("Enter the right placed letters you already have: ")
-    return filtered_by_right_placed_letters(known_part_of_word, word_set)
+    return filtered_by_right_placed_letters(known_part_of_word, word_set) if known_part_of_word else word_set
 
 def filtered_by_right_placed_letters(known_part, word_set):
     # known_part is a string
@@ -112,12 +112,11 @@ def write_result(resulted_word_set):
     
 if __name__ == "__main__":
     
-    initial_word_set = make_set()
-    word_set = get_contained_letters(initial_word_set)
+    word_set = make_set()
+    word_set = get_contained_letters(word_set)
     word_set = get_right_placed_letters(word_set)
     word_set = get_not_contained_letters(word_set)
     word_set = get_wrong_placed_letters(word_set)
 
     print_set(word_set)
-    write_result(word_set)
-    
+    write_result(word_set)    
