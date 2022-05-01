@@ -77,11 +77,29 @@ def filtered_by_right_placed_letters(known_part, word_set):
     result_set = set(result_list)
     return result_set  
         
-def get_wrong_placed_letters():
-    print("")
+def get_wrong_placed_letters(word_set, col_index=0):
+    columns = (0,1,2,3,4)
+    wrong_placed_chars = input("Enter which letter cannot be in the {} column: ".format(columns[col_index])) 
+    column = columns[col_index]
 
-def filtered_by_wrong_placed_letters():
-    print("")
+    word_set = filtered_by_wrong_placed_letters(column, wrong_placed_chars, word_set)
+    
+    return get_wrong_placed_letters(word_set, col_index+1) if col_index != 4 else filtered_by_wrong_placed_letters(columns[col_index], wrong_placed_chars, word_set)
+
+def filtered_by_wrong_placed_letters(column, wrong_placed_chars, word_set):
+    result_list = []
+    for word in word_set:
+        wrong_placed_char_count = 0
+        for char in wrong_placed_chars:
+            if word.index(char) == column:
+                wrong_placed_char_count += 1
+        if wrong_placed_char_count > 0:
+            continue
+        else:
+            result_list.append(word)
+
+    result_set = set(result_list)
+    return result_set
 
 def search_result():
     print('teste')
@@ -95,12 +113,11 @@ def write_result(resulted_word_set):
 if __name__ == "__main__":
     
     initial_word_set = make_set()
-    #print_set(word_set)
     word_set = get_contained_letters(initial_word_set)
     word_set = get_right_placed_letters(word_set)
     word_set = get_not_contained_letters(word_set)
+    word_set = get_wrong_placed_letters(word_set)
 
     print_set(word_set)
     write_result(word_set)
-    #right_placed_letters_word_set = get_right_placed_letters(word_set)
     
