@@ -60,20 +60,54 @@ def get_right_placed_letters(word_set):
     return filtered_by_right_placed_letters(known_part_of_word, word_set) if known_part_of_word else word_set
 
 def filtered_by_right_placed_letters(known_part, word_set):
-    # known_part is a string
-    wildcard = '@'
-    result_list = []
-    
-    known_chars_no_wildcards = ''.join(filter(lambda char: char != wildcard, known_part))
+    def get_time_char_appears_in_string(char, string):
+        times_char_appeared = 0
+        for each in string:
+            if char == each:
+                times_char_appeared += 1
+        return times_char_appeared   
 
+    result_list = []
+    wildcard = '@'
+    known_chars = ''.join(filter(lambda char: char != wildcard, known_part))
+    
+    # removing repeated chars
+    known_chars_not_repeated = known_chars 
+    for char in known_chars:
+        known_chars_not_repeated.replace(char, '', 1)
+
+    # known_part and word:
+    # case: 1 and 1
     for word in word_set:
-        right_placed_letters_count = 0
-        for char in known_part:
-            if char != '@':
+        compatibility_lv = 0
+        for char in known_chars:
+            
+            # get times char apears in known_part:
+            times_at_known_chars = get_time_char_appears_in_string(char, known_chars)
+            # get times char appears in word
+            times_at_word = get_time_char_appears_in_string(char, word)
+            
+            # if 1 and 1
+            if times_at_known_chars == 1 and times_at_word == 1:
                 if known_part.index(char) == word.index(char):
-                    right_placed_letters_count += 1
-                if right_placed_letters_count == len(known_chars_no_wildcards):
-                    result_list.append(word)
+                    compatibility_lv += 1
+            
+            # if 1 and 2
+            if times_at_known_chars == 1 and times_at_word == 2:
+                if known_part.index(char) == word.index(char) or known_part.index(char) == word.rindex(char):
+                    compatibility_lv += 1
+            
+            # if 2 and 1
+            if times_at_known_chars == 2 and times_at_word == 1:
+                continue
+
+            # if 2 and 2
+            if times_at_known_chars == 2 and times_at_word == 2:
+                if known_part.index(char) == word.index(char) and known_part.rindex(char) == word.rindex(char):
+                    compatibility_lv += 1
+        
+        if compatibility_lv == len(known_chars_not_repeated):
+                result_list.append(word)
     result_set = set(result_list)
     return result_set  
         
