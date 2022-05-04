@@ -19,7 +19,11 @@ def print_set(set):
 
 def get_contained_letters(word_set): 
     known_letters = input("Enter the known letters in the word: ")
-    return filtered_by_contained_letters(list(known_letters), word_set)
+    
+    # return filtered set + list of known_letters since its going to
+    # be used afterwards to eliminate possibly mistakes from user if
+    # he type as "not contained letter" one letter in this known_list
+    return filtered_by_contained_letters(list(known_letters), word_set), known_letters
 
 def filtered_by_contained_letters(known_letters, word_set):
     # known_letters is a list of char
@@ -34,9 +38,12 @@ def filtered_by_contained_letters(known_letters, word_set):
     result_set = set(result_list)
     return result_set
 
-def get_not_contained_letters(word_set):
+def get_not_contained_letters(contained_letters, word_set):
     known_not_contained_letters = input("Enter the known letters not in the word: ")
-    return filtered_by_not_contained_letters(known_not_contained_letters, word_set)
+    # find possibly contained letters possibly mistakenly 
+    # typed into "not contained" list by the user
+    filtered_not_contained_letters = [''.join(char) for char in known_not_contained_letters if contained_letters.find(char) == -1]
+    return filtered_by_not_contained_letters(filtered_not_contained_letters, word_set)
 
 def filtered_by_not_contained_letters(known_not_in, word_set):
     result_list = []
@@ -113,7 +120,7 @@ def filtered_by_right_placed_letters(known_part, word_set):
         
 def get_wrong_placed_letters(word_set, col_index=0):
     columns = (0,1,2,3,4)
-    wrong_placed_chars = input("Enter which letter cannot be in the {} column: ".format(columns[col_index])) 
+    wrong_placed_chars = input("Enter which letter cannot be in the {} column: ".format(columns[col_index]+1)) 
     column = columns[col_index]
 
     word_set = filtered_by_wrong_placed_letters(column, wrong_placed_chars, word_set)
@@ -147,9 +154,9 @@ def write_result(resulted_word_set):
 if __name__ == "__main__":
     
     word_set = make_set()
-    word_set = get_contained_letters(word_set)
+    word_set, known_letters = get_contained_letters(word_set)
     word_set = get_right_placed_letters(word_set)
-    word_set = get_not_contained_letters(word_set)
+    word_set = get_not_contained_letters(known_letters, word_set)
     word_set = get_wrong_placed_letters(word_set)
 
     print_set(word_set)
