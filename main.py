@@ -132,7 +132,7 @@ def filtered_by_wrong_placed_letters(column, wrong_placed_chars, word_set):
     for word in word_set:
         wrong_placed_char_count = 0
         for char in wrong_placed_chars:
-            if word.index(char) == column:
+            if word.index(char) == column or word.rindex(char) == column:
                 wrong_placed_char_count += 1
         if wrong_placed_char_count > 0:
             continue
